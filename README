@@ -1,0 +1,12 @@
+这是我的首个有用的Qt程序。这个程序是为一个理发店而写的，用来管理其发放的会员卡。整个程序目前相当幼稚，但我会逐渐更新下去，让它变得相对易用和安全。
+
+我尚未决定该用何种协议发布这一程序，所以只是暂时存放在Github上。
+
+——右京样一
+
+
+This is my first useful Qt program. I wrote this for a barbershop to manage the VIP card. The whole programm is very naive at present. While I will update it to make it safer and more easy to use.
+
+I've not decided which license should be used, so I just store it on Github temporary.
+
+--Ukyoi
