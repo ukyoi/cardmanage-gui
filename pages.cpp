@@ -3,6 +3,7 @@
 
 #define SET_GREEN_BG setStyleSheet("background-color: rgb(127, 255, 127);");
 #define SET_RED_BG setStyleSheet("background-color: rgb(255, 127, 127);");
+#define SET_BLUE_BG setStyleSheet("background-color: rgb(127, 127, 255);");
 
 
 
@@ -42,9 +43,9 @@ int ConsumePage::consume()
         tipLabel->SET_RED_BG;
         return 1;
     }
+    emit consumeFinished();
     tipLabel->setText(tr("Consume successfully."));
     tipLabel->SET_GREEN_BG;
-    emit consumeFinished();
     return 0;
 }
 
@@ -81,9 +82,9 @@ int ChargePage::charge()
         tipLabel->SET_RED_BG;
         return -1;
     }
+    emit chargeFinished();
     tipLabel->setText(tr("Charge successfully."));
     tipLabel->SET_GREEN_BG;
-    emit chargeFinished();
     return 0;
 }
 
@@ -114,20 +115,29 @@ AddUserPage::AddUserPage(QWidget *parent) : QWidget(parent)
 
     setLayout(mainLayout);
     
-    connect( confirmButton, SIGNAL(clicked()), this, SLOT(add()) );
+    connect( confirmButton, SIGNAL(clicked()), this, SLOT(addIt()) );
 }
-int AddUserPage::add()
+int AddUserPage::addIt()
 {
     // FIXME:
-    int result=addUser( (unsigned int)(idEdit->text().toInt()), nameEdit->text().toStdString(), moneyEdit->text().toDouble() );
+    unsigned int userNum=(unsigned int)(idEdit->text().toInt());
+    int result=addUser( userNum, nameEdit->text().toStdString(), moneyEdit->text().toDouble() );
+    if (result==1) {
+        tipLabel->setText(tr("The user number is already exists!"));
+        tipLabel->SET_BLUE_BG
+        return -1;
+    }
     if (result<0) {
         tipLabel->setText(tr("Add user failed!"));
         return -1;
     }
         
-    tipLabel->setText(tr("Add user successfully!"));
-    tipLabel->SET_GREEN_BG;
-    emit addFinished();
+    // Return 0 means successfully.
+    if (result==0) {
+        emit addFinished( userNum, nameEdit->text(), moneyEdit->text().toDouble() );
+        tipLabel->setText(tr("Add user successfully!"));
+        tipLabel->SET_GREEN_BG;
+    }
     return result;
 }
 
@@ -135,6 +145,7 @@ int AddUserPage::add()
 DeleteUserPage::DeleteUserPage(QWidget *parent) : QWidget(parent)
 {
     alertLabel=new QLabel(tr("<font color=red>Are you sure to delete this user's informations?<br>User informations can not be recovered if you deleted them.<font>"));
+    tipLabel=new QLabel();
     confirmCheckBox=new QCheckBox(tr("Confirm to Delete the User."));
     confirmButton=new QPushButton(tr("Delete This User"));
     confirmButton->setEnabled(false);
@@ -142,8 +153,10 @@ DeleteUserPage::DeleteUserPage(QWidget *parent) : QWidget(parent)
     mainLayout->addWidget(alertLabel);
     mainLayout->addWidget(confirmCheckBox);
     mainLayout->addWidget(confirmButton);
+    mainLayout->addWidget(tipLabel);
 
     connect( confirmCheckBox, SIGNAL(stateChanged(int)), this, SLOT(confirmed(int)) );
+    connect( confirmButton, SIGNAL(clicked()), this, SLOT(deleteIt()) );
 
     setLayout(mainLayout);
 }
@@ -152,9 +165,29 @@ void DeleteUserPage::confirmed(int state)
 {
     if (state!=0) {
         qDebug() << "Cheched.";
-        confirmButton->setEnabled(true);
+        if (ifSelectedContentUser) {
+            confirmButton->setEnabled(true);
+        }
     } else {
         qDebug() << "Not Checked.";
         confirmButton->setEnabled(false);
     }
+}
+
+// TODO:
+void DeleteUserPage::deleteIt()
+{
+    int result;
+    if (ifSelectedContentUser) {
+        result=deleteUser(contentUserIndex);
+    }
+    
+    if (result!=0) {
+    tipLabel->setText(tr("Delete failed. Please check your disk space."));
+    tipLabel->SET_RED_BG;
+    }
+    
+    emit deleteFinished();
+    tipLabel->setText(tr("Delete successfully!"));
+    tipLabel->SET_GREEN_BG;
 }

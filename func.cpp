@@ -240,11 +240,11 @@ int addUser(unsigned int newNumber, string newName, double newMoney)
 }
 
 
-int deleteUser(unsigned int userNum)
+int deleteUser(unsigned int userNumIndex)
 {
-    delete userPtrVec.at(userNum);
+    // delete userPtrVec.at(userNum);
     vector<User*>::iterator toDelete=userPtrVec.begin();
-    toDelete+=userNum;
+    toDelete+=userNumIndex;
     userPtrVec.erase(toDelete);
     return writeData();
 }

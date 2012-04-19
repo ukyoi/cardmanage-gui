@@ -72,10 +72,10 @@ private:
     QLabel *moneyTitleLabel;
     QPushButton *confirmButton;
 private slots:
-    int add();
+    int addIt();
     
 signals:
-    void addFinished();
+    void addFinished(unsigned int userNum, QString userName, double userMoney);
 };
 
 
@@ -85,13 +85,17 @@ class DeleteUserPage : public QWidget
     Q_OBJECT
 public:
     DeleteUserPage(QWidget *parent=0);
+    QPushButton *confirmButton;
+    QCheckBox *confirmCheckBox;
+    QLabel *tipLabel;
 private:
     QLabel *alertLabel;
-    QCheckBox *confirmCheckBox;
-    QPushButton *confirmButton;
 
 private slots:
     void confirmed(int state);
+    void deleteIt();
+signals:
+    void deleteFinished();
 
 };
 

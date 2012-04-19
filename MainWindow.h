@@ -70,7 +70,8 @@ private slots:
     void showUserDetail();
     // void showUserDetail(unsigned int userIndex);
     void unselectUser();
-    void setEnabledCashOperations(bool enableOrNot);
+    void setEnableOperations(bool enableOrNot);
+    void showAddFinished(unsigned int userNum, QString userName, double userMoney);
     
 public slots:
     void showAllUser();

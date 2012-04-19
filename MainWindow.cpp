@@ -108,8 +108,9 @@ void MainWindow::createUI()
     
     connect(consumePage, SIGNAL(consumeFinished()), this, SLOT(showUserDetail()) );
     connect(chargePage, SIGNAL(chargeFinished()), this, SLOT(showUserDetail()) );
-    connect(addUserPage, SIGNAL(addFinished()), this, SLOT(showAllUser()) );
-    // connect(addUserPage, SIGNAL(addFinished()), this, SLOT(unselectUser()) );
+    connect(addUserPage, SIGNAL(addFinished(unsigned int, QString, double)), this, SLOT(showAddFinished(unsigned int , QString, double)) );
+    connect(deleteUserPage, SIGNAL(deleteFinished()), this, SLOT(unselectUser()));
+    connect(deleteUserPage, SIGNAL(deleteFinished()), this, SLOT(showAllUser()));
 
     setLayout(funcPartLayout);
 }
@@ -200,8 +201,7 @@ void MainWindow::searchUser(const QString& subtext)
     for (unsigned int i=0; i<userPtrVec.size(); ++i) {
         
         // Check if it's included in a number:
-        // FIXME:
-        // qApp->processEvents();
+        qApp->processEvents();
         QString contentNumQStr=QString("%1").arg( userPtrVec.at(i)->getNum() );
         if(contentNumQStr.indexOf(subtext)!=-1) {
             resultIndex.push_back(i);
@@ -250,6 +250,7 @@ void MainWindow::showUsers(vector<unsigned int> indexVec)
 }
 void MainWindow::showAllUser()
 {
+    searchLineEdit->setText("");
     vector<unsigned int> allUserVec;
     allUserVec.reserve(1024);
     for (unsigned int i=0; i<userPtrVec.size(); ++i)
@@ -259,6 +260,7 @@ void MainWindow::showAllUser()
 
 void MainWindow::selectUser(int tableWidgetRow, int /*tableWidgetCol*/)
 {
+    // the purpose of unselecting user is to remove the tip show of each page.
     if (ifSelectedContentUser) {
         unselectUser();
     }
@@ -267,7 +269,7 @@ void MainWindow::selectUser(int tableWidgetRow, int /*tableWidgetCol*/)
     qDebug() << "Content userIndex is " << contentUserIndex;
     ifSelectedContentUser=true;
     showUserDetail();
-    setEnabledCashOperations(true);
+    setEnableOperations(true);
 }
 
 void MainWindow::showUserDetail()
@@ -278,24 +280,16 @@ void MainWindow::showUserDetail()
         moneyValueLabel->setText( QString::number( userPtrVec.at(contentUserIndex)->getMoney() ) );
     }
 }
-/*
-void MainWindow::showUserDetail(unsigned int userIndex)
-{
-    contentUserIndex=userIndex;
-    ifSelectedContentUser=true;
-    showUserDetail();
-}
-*/
-
 
 void MainWindow::unselectUser()
 {
     /**
-     * This function should be called after taking any operation related to user index change or adding/deleting user.
+     * This function can also cancel all things after any operation
+     * so that this function should be called after taking any operation related to user index change or adding/deleting user.
      */
     
     ifSelectedContentUser=false;
-    setEnabledCashOperations(false);
+    setEnableOperations(false);
     qDebug() << "A user is unselected";
     
     nameValueLabel->setText("");
@@ -315,11 +309,29 @@ void MainWindow::unselectUser()
     addUserPage->idEdit->setText("");
     addUserPage->nameEdit->setText("");
     addUserPage->moneyEdit->setText("");
+    
+    deleteUserPage->tipLabel->setText("");
+    deleteUserPage->tipLabel->setStyleSheet("");
 }
 
-void MainWindow::setEnabledCashOperations(bool enableOrNot) {
+void MainWindow::setEnableOperations(bool enableOrNot) {
     chargePage->confirmButton->setEnabled(enableOrNot);
     consumePage->confirmButton->setEnabled(enableOrNot);
+    // FIXME:
+    if (deleteUserPage->confirmCheckBox->isChecked()) {
+        deleteUserPage->confirmButton->setEnabled(enableOrNot);
+    }
+}
+
+void MainWindow::showAddFinished(unsigned int userNum, QString userName, double userMoney)
+{
+    qDebug() << "showAddUserFinished() triggered.";
+    unselectUser();
+    
+    nameValueLabel->setText(userName);
+    moneyValueLabel->setText(QString::number(userMoney));
+    numberValueLabel->setText(QString::number(userNum));
+    showAllUser();
 }
 
 User* MainWindow::getContentUserPtr()
