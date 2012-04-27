@@ -9,6 +9,7 @@
 #include <QtGui/QVBoxLayout>
 #include <QtGui/QGridLayout>
 #include <QtGui/QCheckBox>
+#include <QtGui/QRegExpValidator>
 
 #include <QDebug>
 

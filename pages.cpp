@@ -5,6 +5,10 @@
 #define SET_RED_BG setStyleSheet("background-color: rgb(255, 127, 127);");
 #define SET_BLUE_BG setStyleSheet("background-color: rgb(127, 127, 255);");
 
+#define SET_FLOAT_QREGEXP(labelName) \
+QRegExp floatRx("^([0-9]+)[.]([0-9]+)&"); \
+(labelName)->setValidator(new QRegExpValidator(floatRx));
+
 
 
 ConsumePage::ConsumePage(QWidget *parent) : QWidget(parent)
@@ -15,6 +19,8 @@ ConsumePage::ConsumePage(QWidget *parent) : QWidget(parent)
     tipLabel=new QLabel;
     confirmButton=new QPushButton(tr("Consume Now"));
     confirmButton->setEnabled(false);
+    
+    SET_FLOAT_QREGEXP(moneyEdit);
 
     QHBoxLayout *enterLayout=new QHBoxLayout;
     enterLayout->addWidget(moneyLabel);
@@ -57,6 +63,8 @@ ChargePage::ChargePage(QWidget *parent) : QWidget(parent)
     tipLabel=new QLabel;
     confirmButton=new QPushButton(tr("Charge Now"));
     confirmButton->setEnabled(false);
+    
+    SET_FLOAT_QREGEXP(moneyEdit);
 
     QHBoxLayout *enterLayout=new QHBoxLayout;
     enterLayout->addWidget(moneyLabel);
@@ -99,6 +107,12 @@ AddUserPage::AddUserPage(QWidget *parent) : QWidget(parent)
     moneyEdit=new QLineEdit;
     tipLabel=new QLabel;
     confirmButton=new QPushButton(tr("Add This User"));
+    
+    QRegExp intRx("^[0-9]{1,5}&");
+    idEdit->setValidator(new QRegExpValidator(intRx, this));
+    SET_FLOAT_QREGEXP(moneyEdit);
+    
+    
 
     QGridLayout *gridLayout=new QGridLayout;
     gridLayout->addWidget(idTitleLabel, 0, 0);
@@ -177,7 +191,7 @@ void DeleteUserPage::confirmed(int state)
 // TODO:
 void DeleteUserPage::deleteIt()
 {
-    int result;
+    int result=1;
     if (ifSelectedContentUser) {
         result=deleteUser(contentUserIndex);
     }
