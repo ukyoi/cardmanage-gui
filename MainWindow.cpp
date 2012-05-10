@@ -260,10 +260,7 @@ void MainWindow::showAllUser()
 
 void MainWindow::selectUser(int tableWidgetRow, int /*tableWidgetCol*/)
 {
-    // the purpose of unselecting user is to remove the tip show of each page.
-    if (ifSelectedContentUser) {
-        unselectUser();
-    }
+    unselectUser(); // the purpose of unselecting user is to remove the tip show of each page.
     qDebug() << "A user is selected.";
     contentUserIndex=tableItemIndexVec.at(tableWidgetRow);
     qDebug() << "Content userIndex is " << contentUserIndex;
@@ -298,11 +295,11 @@ void MainWindow::unselectUser()
     
     chargePage->tipLabel->setText("");
     chargePage->tipLabel->setStyleSheet("");
-    chargePage->moneyLabel->setText("");
+    chargePage->moneyEdit->setText("");
     
     consumePage->tipLabel->setText("");
     consumePage->tipLabel->setStyleSheet("");
-    consumePage->moneyLabel->setText("");
+    consumePage->moneyEdit->setText("");
     
     addUserPage->tipLabel->setText("");
     addUserPage->tipLabel->setStyleSheet("");
@@ -312,6 +309,7 @@ void MainWindow::unselectUser()
     
     deleteUserPage->tipLabel->setText("");
     deleteUserPage->tipLabel->setStyleSheet("");
+    deleteUserPage->confirmCheckBox->setCheckState(Qt::Unchecked);
 }
 
 void MainWindow::setEnableOperations(bool enableOrNot) {
