@@ -10,3 +10,6 @@ INCLUDEPATH += .
 # Input
 HEADERS += func.h MainWindow.h pages.h
 SOURCES += func.cpp main.cpp MainWindow.cpp pages.cpp
+
+# Translation
+TRANSLATIONS = translate_zh.ts
