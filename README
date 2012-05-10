@@ -8,7 +8,7 @@
 1、检查您是否有 Qt 4.3 或以上版本
 2、在终端中进入程序所在目录
 3、（中文用户）在终端中执行： lrelease
-4、在终端中执行： make
+4、在终端中执行： qmake && make
 5、运行目录下的“cardmanage-gui”（或“cardmanage-gui.exe”）运行程序
 
 
@@ -22,5 +22,5 @@ I've not decided which license should be used, so I just store it on Github temp
 1. Check if you have Qt 4.3 or newer version.
 2. Enter the directory which the files saved at.
 3. (Chinese user only) run in terminal: lrelease
-4. run in terminal: make
-5. run cardmanage-gui (or cardmanage-gui.exe in Windows) to run the program.
+4. Run in terminal: qmake && make
+5. Run cardmanage-gui (or cardmanage-gui.exe in Windows) to run the program.
