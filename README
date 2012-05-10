@@ -4,7 +4,7 @@
 
 ——右京样一
 
-==使用方法==
+==安装方法==
 1、检查您是否有 Qt 4.3 或以上版本
 2、在终端中进入程序所在目录
 3、（中文用户）在终端中执行： lrelease
@@ -18,7 +18,7 @@ I've not decided which license should be used, so I just store it on Github temp
 
 --Ukyoi
 
-==USER GUIDE==
+==INSTALLATION GUIDE==
 1. Check if you have Qt 4.3 or newer version.
 2. Enter the directory which the files saved at.
 3. (Chinese user only) run in terminal: lrelease
