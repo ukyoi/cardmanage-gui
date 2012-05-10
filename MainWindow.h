@@ -68,7 +68,6 @@ private slots:
     void searchUser(const QString& subtext);
     void selectUser(int tableWidgetRow, int tableWidgetCol);
     void showUserDetail();
-    // void showUserDetail(unsigned int userIndex);
     void unselectUser();
     void setEnableOperations(bool enableOrNot);
     void showAddFinished(unsigned int userNum, QString userName, double userMoney);
